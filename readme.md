@@ -41,7 +41,7 @@ Takes any single value, `val`, and returns it in the specified `format` or `null
 Entities.normalizeXML( str [, format ] )
 ```
 
-Takes, `str`, a string of xml (ie. html and xhtml) and converts all HTML entities and non-ASCII characters into the specified `format`. See above for valid formats.
+Takes, `str`, a string of xml (ie. html and xhtml) and converts all HTML entities and non-ASCII characters into the specified `format`. See above for valid formats. The default format is `html`.
 
 ### normalizeEntities()
 
@@ -49,7 +49,7 @@ Takes, `str`, a string of xml (ie. html and xhtml) and converts all HTML entitie
 Entities.normalizeEntities( str [, format ] )
 ```
 
-Takes, `str`, a string and converts all HTML entities into the specified `format`. See above for valid formats.
+Takes, `str`, a string and converts all HTML entities into the specified `format`. See above for valid formats. The default format is `html`.
 
 ### toCharCode()
 
