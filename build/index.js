@@ -1,8 +1,7 @@
 var fs = require("fs"),
 	entities = require("./raw.json");
 
-var by_entity = {},
-	by_code = {};
+var by_name = {};
 
 entities.forEach(function(entity) {
 	var codes = entity.codes.map(function(c) {
@@ -10,11 +9,7 @@ entities.forEach(function(entity) {
 	});
 
 	if (!codes.length) return;
-	by_entity[entity.entity] = codes[0];
-
-	codes.forEach(function(c) {
-		by_code[c] = entity.entity;
-	});
+	by_name[entity.entity] = codes[0];
 });
 
-fs.writeFileSync("./entities.json", JSON.stringify({ entity: by_entity, code: by_code }), "utf-8");
+fs.writeFileSync("./entities.json", JSON.stringify(by_name), "utf-8");
