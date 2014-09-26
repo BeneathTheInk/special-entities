@@ -1,9 +1,9 @@
-
 var data = require("./entities.json");
 
 var hex_value_regex = /^0x([a-z0-9]+)$/i,
 	entity_regex = /&[a-z0-9#]+;?/ig,
-	hex_entity_regex = /^&#x?([a-f0-9]+);?$/i,
+	dec_entity_regex = /^&#([0-9]+);?$/i,
+	hex_entity_regex = /^&#x([a-f0-9]+);?$/i,
 	spec_entity_regex = /^&([a-z0-9]+);?$/i;
 
 var exports =
@@ -18,17 +18,24 @@ module.exports = {
 		});
 	},
 
+	// converts value into utf-8 character or entity equivalent
 	format: function(s, format) {
 		var code = exports.getCharCode(s);
 		if (code === false) return null;
 
 		switch(format) {
-			// only hex entities
+			// only decimal entities
 			case "xml":
-			case "hex":
+			case "xhtml":
+			case "dec":
+			case "decimal":
 				return exports.toHTMLEntity(code);
 
-			// first special, then hex
+			// only hex entities
+			case "hex":
+				return exports.toHTMLEntity(code, "hex");
+
+			// first special, then decimal
 			case "html":
 				return exports.toHTMLEntity(data.code[code] || code);
 
@@ -43,9 +50,8 @@ module.exports = {
 			case "utf-8":
 				return String.fromCharCode(code);
 
+			// regular number
 			case "code":
-			case "dec":
-			case "decimal":
 				return code;
 		}
 
@@ -67,6 +73,11 @@ module.exports = {
 				return code != null ? code : false;
 			}
 
+			// decimal entity
+			if (m = dec_entity_regex.exec(s)) {
+				return parseInt(m[1], 10);
+			}
+
 			// hex entity
 			if (m = hex_entity_regex.exec(s)) {
 				return parseInt(m[1], 16);
@@ -83,7 +94,11 @@ module.exports = {
 		return false;
 	},
 
-	toHTMLEntity: function(n) {
-		return "&" + (typeof n === "number" ? "#" + n.toString(16) : n) + ";";
+	toHTMLEntity: function(n, format) {
+		return "&" + (
+			typeof n === "number" ?
+			"#" + (format === "hex" ? "x" : "") +
+			n.toString(format === "hex" ? 16 : 10) : n
+		) + ";";
 	}
 }
