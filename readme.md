@@ -23,17 +23,17 @@ This library exposes an object, `Entities`, with the following methods:
 ### convert()
 
 ```
-Entities.convert( val, format )
+Entities.convert( val [, format ] )
 ```
 
 Takes any single value, `val`, and returns it in the specified `format` or `null` if the value cannot be converted. `val` can be any single UTF-8 character, a valid HTML entity (ie. `&amp;` or `&#x26;`), or an integer representing a Unicode code point. `format` can be any of the following values:
 
-* __`xml`, `xhtml`, `num`, `numeric`__ - A numeric character reference. Ex. `&#38;`, `&#169;`
+* __`numeric`__ - A numeric character reference. Ex. `&#38;`, `&#169;`
 * __`hex`__ - A hexadecimal character reference. Ex. `&#x26;`, `&#xA9;`
-* __`name`, `special`__ - A named character reference (aka a special entity). Ex. `&amp;`, `&copy;`
-* __`html`__ - First looks for the named reference equivalent, otherwise returns a numeric reference. Basically a combo of `name` and `xml`.
-* __`char`, `character`, `utf-8`__ - A single utf-8 character. Ex. `&`, `©`
+* __`name`__ - A named character reference (aka a special entity). Ex. `&amp;`, `&copy;`.
+* __`utf-8`__ - A single utf-8 character. Ex. `&`, `©`
 * __`code`__ - A Unicode code point. Ex. `38`, `169`
+* __`html`__ - First looks for the named reference equivalent, otherwise returns a numeric reference. Basically a combo of `name` and `xml`. This is the default format.
 
 ### normalizeXML()
 
@@ -74,5 +74,5 @@ Entities.codeToName( code )
 Entities.nameToCode( name )
 ```
 
-These methods help to convert between a special entity name and a unicode code point. Names should not include the HTML entity formatting (eg. just `copy`, not `&copy;`).
+These methods help to convert between a special entity name and a unicode code point. Names should not include the HTML entity formatting (eg. just `"copy"`, not `"&copy;"`).
 

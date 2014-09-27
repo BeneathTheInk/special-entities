@@ -5,12 +5,15 @@ exports.by_name = require("./entities.json");
 // index the reverse mappings immediately
 var by_code = exports.by_code = {};
 Object.keys(by_name).forEach(function(n) {
-	by_code[by_name[n]] = n;
+	by_name[n].forEach(function(c) {
+		if (by_code[c] == null) by_code[c] = [];
+		by_code[c].push(n);
+	});
 });
 
 // a few regular expressions for parsing entities
-var hex_value_regex = /^0?x([a-z0-9]+)$/i,
-	entity_regex = /&[a-z0-9#]+;?/ig,
+var hex_value_regex = /^0?x([a-f0-9]+)$/i,
+	entity_regex = /&(?:#x[a-f0-9]+|#[0-9]+|[a-z0-9]+);?/ig,
 	dec_entity_regex = /^&#([0-9]+);?$/i,
 	hex_entity_regex = /^&#x([a-f0-9]+);?$/i,
 	spec_entity_regex = /^&([a-z0-9]+);?$/i;
@@ -18,17 +21,14 @@ var hex_value_regex = /^0?x([a-z0-9]+)$/i,
 // converts all entities found in string to specific format
 var normalizeEntities =
 exports.normalizeEntities = function(str, format) {
-	if (format == null) format = "html";
 	return str.replace(entity_regex, function(entity) {
-		var res = normalize(entity, format);
-		return res != null ? res : entity;
+		return convert(entity, format) || entity;
 	});
 }
 
 // converts all entities and higher order utf-8 chars to format
 exports.normalizeXML = function(str, format) {
 	var i, code, res;
-	if (format == null) format = "html";
 	
 	// convert entities first
 	str = normalizeEntities(str, format);
@@ -49,8 +49,9 @@ exports.normalizeXML = function(str, format) {
 var convert =
 exports.convert = function(s, format) {
 	var code, name;
+	if (format == null) format = "html";
 
-	code = exports.toCharCode(s);
+	code = toCharCode(s);
 	if (code === false) return null;
 
 	switch(format) {
@@ -93,18 +94,19 @@ exports.convert = function(s, format) {
 var cton =
 exports.codeToName = function(c) {
 	var n = by_code[c.toString()];
-	return n != null ? n : null;
+	return n != null ? n[0] : null;
 }
 
 // name to code
 var ntoc =
 exports.nameToCode = function(n) {
 	var c = by_name[n]
-	return c != null ? c : null;
+	return c != null ? c[0] : null;
 }
 
 // parse an array of inputs and returns the equivalent
 // unicode decimal or false if invalid
+var toCharCode =
 exports.toCharCode = function(s) {
 	var m, code;
 
@@ -116,8 +118,7 @@ exports.toCharCode = function(s) {
 
 		// special entity
 		if (m = spec_entity_regex.exec(s)) {
-			code = ntoc(m[1]);
-			return code != null ? code : false;
+			return ntoc(m[1]) || false;
 		}
 
 		// decimal entity

@@ -1,7 +1,7 @@
 {
 	"name": "special-entities",
 	"description": "A small JavaScript library for normalizing the encoding of HTML entities.",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"author": "Beneath the Ink <info@beneaththeink.com>",
 	"contributors": [
 		{
