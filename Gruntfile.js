@@ -5,7 +5,7 @@ module.exports = function(grunt) {
 		clean: [ "dist/*.js" ],
 		browserify: {
 			dist: {
-				src: "index.js",
+				src: "lib/index.js",
 				dest: "dist/special-entities.js",
 				options: {
 					browserifyOptions: { standalone: "Entities" }

@@ -1,7 +1,7 @@
 {
 	"name": "special-entities",
 	"description": "A small JavaScript library for normalizing the encoding of HTML entities.",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"author": "Beneath the Ink <info@beneaththeink.com>",
 	"contributors": [
 		{
@@ -14,7 +14,7 @@
 		"type": "git",
 		"url": "https://github.com/BeneathTheInk/special-entities.git"
 	},
-	"main": "index.js",
+	"main": "lib/index.js",
 	"devDependencies": {
 		"grunt": "~0.4.5",
 		"grunt-browserify": "~3.0.1",
